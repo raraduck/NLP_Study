@@ -116,3 +116,10 @@ corpus1_tidy <- tidy(corpora_replace[[1]]) %>%
   select(c("sid", "pid", "text")) %>%
   unnest_tokens(output=word, input=text)
 corpus1_tidy
+class(corpus1_tidy)
+corpus1_tidy %>% print(n=Inf)
+
+corpus1_tidy %>% 
+  count(word) %>%
+  arrange(desc(n))
+
