@@ -17,8 +17,11 @@ library(tidytext)
 
 
 # 파일을 읽어들일 폴더의 경로를 지정합니다.
-folder_path <- "E:/workspace/NLP_Study/week2/data/p10"
+folder_path <- "E:/workspace/NLP_Study/week2/data/p10/p10000032"
 
+# 해당 경로에서 .txt 파일의 목록을 재귀적으로 가져옵니다.
+file_paths <- list.files(path = folder_path, pattern = "\\.txt$", full.names = TRUE, recursive = TRUE)
+file_paths
 # 각 파일을 읽어들여 tibble에 저장합니다.
 data_list <- lapply(file_paths, function(file_path) {
   data <- read_lines(file_path) %>% # 여기서는 각 파일을 텍스트 라인으로 읽어들입니다.
@@ -33,11 +36,16 @@ data_list <- lapply(file_paths, function(file_path) {
     )
 })
 data_list
-
+# class(data_list[[1]])
+# data1_tibble <- text.df %>% select(uid, word)
+data1 <- data_list[[1]]
+class(data1)
+data1$text
+data1$uid
 
 # 모든 tibble을 하나로 결합합니다.
 final_data <- bind_rows(data_list)
-
+final_data
 
 # final_data의 text 칼럼에서 앞뒤 공백을 제거
 final_data <- final_data %>% 
