@@ -28,18 +28,18 @@ data_tbl <- map_dfr(file_paths, function(el) {
     paste(collapse = "\n") %>%
     tibble(text = .) %>%
     mutate(
-      sid = basename(dirname(dirname(el))),
-      pid = basename(dirname(el)),
-      uid = basename(el),
+      group_id = basename(dirname(dirname(el))),
+      subject_id = basename(dirname(el)),
+      study_id = basename(el),
     ) %>%
     mutate(
-      pid = str_extract(pid, "\\d+"),
-      uid = str_extract(uid, "\\d+")
+      subject_id = str_extract(subject_id, "\\d+"),
+      study_id = str_extract(study_id, "\\d+")
     )
 }) %>% 
   mutate(doc_id = row_number()) # 여기에서 doc_id를 추가합니다.
 
-data_tbl <- data_tbl %>% select(doc_id, sid, pid, uid, text)
+data_tbl <- data_tbl %>% select(doc_id, group_id, subject_id, study_id, text)
 data_tbl
 
 docs <- VCorpus(DataframeSource(data_tbl))
@@ -47,15 +47,15 @@ docs
 
 
 # 이미 생성된 VCorpus 객체(docs)에 대해
-# 각 문서에 sid, pid, uid 메타데이터 추가
+# 각 문서에 group_id, subject_id, study_id 메타데이터 추가
 for (i in 1:length(docs)) {
-  # 각 문서의 sid, pid, uid를 가져와서 메타데이터에 설정
-  meta(docs[[i]], tag = "sid") <- data_tbl$sid[i]
-  meta(docs[[i]], tag = "pid") <- data_tbl$pid[i]
-  meta(docs[[i]], tag = "uid") <- data_tbl$uid[i]
+  # 각 문서의 group_id, subject_id, study_id 가져와서 메타데이터에 설정
+  meta(docs[[i]], tag = "group_id") <- data_tbl$group_id[i]
+  meta(docs[[i]], tag = "subject_id") <- data_tbl$subject_id[i]
+  meta(docs[[i]], tag = "study_id") <- data_tbl$study_id[i]
 }
 docs
-target_docs = c(10,50,100)
+target_docs = c(1,2,3)
 # lapply(docs, meta)[target_docs]
 # lapply(docs, content)[target_docs]
 docs_tm <- docs
@@ -63,4 +63,4 @@ docs_tm <- docs
 # docs_tm <- tm_map(docs_tm, stripWhitespace)
 docs_tm <- tm_map(docs_tm, content_transformer(trimws))
 lapply(docs_tm, content)[target_docs]
-lapply(docs_tm, meta)[100]
+lapply(docs_tm, meta)[3]
