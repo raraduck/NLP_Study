@@ -16,7 +16,7 @@ library(readr)
 library(tidytext)
 
 # 파일을 읽어들일 폴더의 경로를 지정합니다.
-folder_path <- "E:/workspace/NLP_Study/week2/data/p10"
+folder_path <- "week2/data/p10"
 
 # 해당 경로에서 .txt 파일의 목록을 재귀적으로 가져옵니다.
 file_paths <- list.files(path = folder_path, pattern = "\\.txt$", full.names = TRUE, recursive = TRUE)
@@ -33,7 +33,8 @@ data_tbl <- map_dfr(file_paths, function(el) {
       uid = basename(el),
     ) %>%
     mutate(
-      uid = str_extract(uid, "s\\d+")
+      pid = str_extract(pid, "\\d+"),
+      uid = str_extract(uid, "\\d+")
     )
 }) %>% 
   mutate(doc_id = row_number()) # 여기에서 doc_id를 추가합니다.
