@@ -20,8 +20,10 @@ data_tbl <- data_tbl %>%
     study_id = as.integer(study_id)
   )
 data_tbl
+write.csv(data_tbl, "week2/CXR_files.csv", row.names = FALSE)
 
 merged_tbl <- inner_join(data_tbl, unique_tbl)
 merged_tbl <- merged_tbl %>% select(doc_id, group_id, subject_id, study_id, Atelectasis:Tortuous.Aorta, text)
+merged_tbl
 write.csv(merged_tbl, "week2/CXR_label_merged.csv", row.names = FALSE)
 
